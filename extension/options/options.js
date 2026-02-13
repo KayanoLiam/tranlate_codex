@@ -27,7 +27,8 @@ function runtimeSend(message) {
 
 function setStatus(message, isError = false) {
   statusText.textContent = message;
-  statusText.style.color = isError ? "#b24b30" : "#1d2f3b";
+  statusText.style.color = isError ? "#D65F5F" : "#2B2B2B";
+  statusText.style.display = message ? "block" : "none";
 }
 
 function toInt(value, fallback, min, max) {

@@ -45,11 +45,12 @@ function ensureStyle() {
     .${NOTE_CLASS} {
       margin-top: 0.35em;
       padding-top: 0.35em;
-      border-top: 1px dashed rgba(86, 95, 110, 0.45);
+      border-top: 1px dashed rgba(145, 168, 86, 0.45);
       font-size: 0.92em;
       line-height: 1.55;
-      color: #1c5f87;
+      color: #2B2B2B;
       white-space: pre-wrap;
+      font-family: "Segoe UI", "SF Pro Text", "Hiragino Kaku Gothic ProN", Arial, sans-serif;
     }
 
     #${SELECTION_PANEL_ID} {
@@ -59,40 +60,47 @@ function ensureStyle() {
       max-width: min(640px, calc(100vw - 32px));
       max-height: 50vh;
       overflow: auto;
-      background: #fafaf9;
-      color: #1a2a36;
-      border: 1px solid #9db1bf;
-      border-radius: 10px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+      background: #F8F6F2;
+      color: #2B2B2B;
+      border: 1px solid #E5E0D8;
+      border-radius: 8px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
       z-index: 2147483647;
       font-size: 14px;
       line-height: 1.5;
+      font-family: "Segoe UI", "SF Pro Text", "Hiragino Kaku Gothic ProN", Arial, sans-serif;
     }
 
     #${SELECTION_PANEL_ID} header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 12px;
-      border-bottom: 1px solid #d5dde3;
+      padding: 10px 14px;
+      border-bottom: 1px solid #E5E0D8;
       font-weight: 600;
-      background: #f0f5f8;
+      background: #FFFFFF;
+      border-radius: 8px 8px 0 0;
     }
 
     #${SELECTION_PANEL_ID} .content {
-      padding: 12px;
+      padding: 14px;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
     #${SELECTION_PANEL_ID} button {
       border: none;
-      background: #c03c2f;
+      background: #91A856;
       color: white;
-      padding: 4px 8px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 4px;
       cursor: pointer;
       font-size: 12px;
+      transition: opacity 0.2s;
+    }
+
+    #${SELECTION_PANEL_ID} button:hover {
+      opacity: 0.9;
     }
   `;
 

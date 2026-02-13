@@ -1,37 +1,57 @@
 :root {
-  font-family: "Segoe UI", "SF Pro Text", Arial, sans-serif;
+  /* Kyoto Wasabi Palette */
+  --color-wasabi: #91A856;
+  --color-washi: #F8F6F2;
+  --color-paper: #FFFFFF;
+  --color-sumi: #2B2B2B;
+  --color-stone: #666666;
+  --color-sand: #E5E0D8;
+  /* Border/Divider */
+  --color-vermilion: #D65F5F;
+  /* Accent/Error */
+
+  font-family: "Segoe UI", "SF Pro Text", "Hiragino Kaku Gothic ProN", Arial, sans-serif;
   color-scheme: light;
 }
 
 body {
   margin: 0;
-  background: #f4f7f8;
-  color: #1d2f3b;
+  background-color: var(--color-washi);
+  color: var(--color-sumi);
+  font-size: 14px;
 }
 
 main {
-  max-width: 760px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #ffffff;
-  border: 1px solid #d4dce2;
-  border-radius: 12px;
+  max-width: 700px;
+  margin: 32px auto;
+  padding: 32px;
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-sand);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 h1 {
   margin-top: 0;
-  font-size: 22px;
+  margin-bottom: 24px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-sumi);
+  border-bottom: 2px solid var(--color-wasabi);
+  display: inline-block;
+  padding-bottom: 6px;
 }
 
 form {
   display: grid;
-  gap: 14px;
+  gap: 20px;
 }
 
 label {
   display: grid;
-  gap: 6px;
-  font-size: 14px;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--color-sumi);
 }
 
 input,
@@ -42,48 +62,87 @@ button {
 
 input,
 select {
-  border: 1px solid #a9b6c1;
-  border-radius: 8px;
-  padding: 9px 10px;
-  background: #fff;
+  border: 1px solid var(--color-sand);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background-color: var(--color-paper);
+  color: var(--color-sumi);
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-wasabi);
+  box-shadow: 0 0 0 2px rgba(145, 168, 86, 0.2);
 }
 
 .grid.two {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 20px;
 }
 
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--color-sand);
 }
 
 button {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  background: #2f668d;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 10px 18px;
+  background-color: var(--color-wasabi);
   color: #fff;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button.secondary {
-  background: #6a7a89;
+  background-color: var(--color-paper);
+  color: var(--color-stone);
+  border: 1px solid var(--color-sand);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+button.secondary:hover {
+  border-color: var(--color-wasabi);
+  color: var(--color-wasabi);
 }
 
 .status {
-  margin-top: 14px;
-  min-height: 18px;
-  font-size: 14px;
+  margin-top: 20px;
+  min-height: 20px;
+  font-size: 13px;
+  color: var(--color-stone);
+  background: var(--color-washi);
+  padding: 10px;
+  border-radius: 6px;
+  display: none;
+  /* Hidden by default */
 }
 
 @media (max-width: 640px) {
   main {
     margin: 0;
     border-radius: 0;
-    border-left: none;
-    border-right: none;
+    border: none;
+    box-shadow: none;
   }
 
   .grid.two {

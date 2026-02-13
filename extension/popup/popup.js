@@ -74,7 +74,8 @@ function setBusy(isBusy) {
 
 function setResult(text, isError = false) {
   resultText.textContent = text;
-  resultText.style.color = isError ? "#b24b30" : "#1f2f3d";
+  resultText.style.color = isError ? "#D65F5F" : "#2B2B2B";
+  resultText.style.display = text ? "block" : "none";
 }
 
 function setStatus(kind, text) {

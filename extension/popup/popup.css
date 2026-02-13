@@ -1,89 +1,137 @@
 :root {
+  /* Kyoto Wasabi Palette */
+  --color-wasabi: #91A856;
+  --color-washi: #F8F6F2;
+  --color-paper: #FFFFFF;
+  --color-sumi: #2B2B2B;
+  --color-stone: #666666;
+  --color-sand: #E5E0D8;
+  /* Border/Divider */
+  --color-vermilion: #D65F5F;
+  /* Accent/Error */
+
+  font-family: "Segoe UI", "SF Pro Text", "Hiragino Kaku Gothic ProN", Arial, sans-serif;
   color-scheme: light;
-  font-family: "Segoe UI", "SF Pro Text", Arial, sans-serif;
 }
 
 body {
   margin: 0;
   width: 320px;
-  background: #f5f7fa;
-  color: #1f2f3d;
+  background-color: var(--color-washi);
+  color: var(--color-sumi);
 }
 
 .app {
-  padding: 14px;
+  padding: 16px;
 }
 
 h1 {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-size: 16px;
+  font-weight: 600;
+  color: var(--color-sumi);
+  border-bottom: 2px solid var(--color-wasabi);
+  display: inline-block;
+  padding-bottom: 4px;
 }
 
 .status-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  font-size: 12px;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  background: var(--color-paper);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--color-sand);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .badge {
-  border-radius: 999px;
-  padding: 2px 8px;
+  border-radius: 4px;
+  padding: 3px 8px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   color: #fff;
+  letter-spacing: 0.5px;
 }
 
 .badge.pending {
-  background: #5f6f82;
+  background: var(--color-stone);
 }
 
 .badge.ok {
-  background: #23804e;
+  background: var(--color-wasabi);
 }
 
 .badge.error {
-  background: #b24b30;
+  background: var(--color-vermilion);
 }
 
 .actions,
 .footer-actions {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 
 .footer-actions {
-  margin-top: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-sand);
 }
 
 button {
-  border: none;
-  border-radius: 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
   padding: 10px;
-  background: #2d5f8a;
+  background-color: var(--color-wasabi);
   color: #fff;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-  opacity: 0.94;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button.secondary {
-  background: #687a8d;
+  background-color: var(--color-paper);
+  color: var(--color-sumi);
+  border: 1px solid var(--color-sand);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+button.secondary:hover {
+  border-color: var(--color-wasabi);
+  color: var(--color-wasabi);
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .result {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   font-size: 12px;
-  line-height: 1.4;
-  min-height: 34px;
+  line-height: 1.5;
+  color: var(--color-stone);
+  background: var(--color-paper);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-sand);
+  display: none;
+  /* Hidden by default */
 }
