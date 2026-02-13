@@ -7,7 +7,7 @@ const DEFAULT_SETTINGS = {
   model: "",
   batchSize: 6,
   maxCharsPerItem: 1200,
-  maxPageItems: 120,
+  maxPageItems: 220,
 };
 
 function storageGet(keys) {

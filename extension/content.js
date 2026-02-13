@@ -5,8 +5,12 @@ const SOURCE_TEXT_ATTR = "data-openai-source-text";
 const TRANSLATION_ID_ATTR = "data-openai-translation-id";
 const TRANSLATED_ATTR = "data-openai-translated";
 
-const BLOCK_SELECTOR = "p,li,h1,h2,h3,h4,h5,h6,blockquote,figcaption,td,th";
-const DEFAULT_MAX_PAGE_ITEMS = 120;
+const PRIMARY_BLOCK_SELECTOR = "p,li,h1,h2,h3,h4,h5,h6,blockquote,figcaption,td,th";
+const FALLBACK_LEAF_SELECTOR = "div";
+const DEFAULT_MAX_PAGE_ITEMS = 220;
+const MIN_TEXT_LENGTH = 3;
+const BLOCK_LIKE_CHILD_SELECTOR =
+  "p,li,h1,h2,h3,h4,h5,h6,blockquote,figcaption,td,th,div,section,article,main,aside,nav,header,footer,ul,ol,table,tr";
 
 let isTranslating = false;
 
@@ -105,13 +109,54 @@ function isVisible(element) {
   return rect.width > 0 && rect.height > 0;
 }
 
+function isExcluded(element) {
+  return Boolean(
+    element.closest("script,style,noscript,pre,code,textarea,[contenteditable='true'],svg,math")
+  );
+}
+
+function isMeaningfulText(text) {
+  if (!text || text.length < MIN_TEXT_LENGTH) {
+    return false;
+  }
+
+  // Require at least one letter/number-like symbol to avoid punctuation-only rows.
+  return /[\p{L}\p{N}]/u.test(text);
+}
+
 function hasDirectTranslatableChild(element) {
   for (const child of element.children) {
-    if (child.matches && child.matches(BLOCK_SELECTOR)) {
+    if (child.matches && child.matches(PRIMARY_BLOCK_SELECTOR)) {
       return true;
     }
   }
   return false;
+}
+
+function hasMeaningfulBlockChild(element) {
+  for (const child of element.children) {
+    if (!isVisible(child)) {
+      continue;
+    }
+    if (!(child.matches && child.matches(BLOCK_LIKE_CHILD_SELECTOR))) {
+      continue;
+    }
+    const text = normalizeText(child.innerText || child.textContent || "");
+    if (isMeaningfulText(text)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getDirectText(element) {
+  let text = "";
+  for (const node of element.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      text += ` ${node.textContent || ""}`;
+    }
+  }
+  return normalizeText(text);
 }
 
 function extractSourceText(element) {
@@ -132,10 +177,34 @@ function extractSourceText(element) {
 
 function collectTranslatableRows(maxCharsPerItem, maxItems) {
   const rows = [];
-  const nodes = document.querySelectorAll(BLOCK_SELECTOR);
-
   let counter = 0;
-  for (const element of nodes) {
+  let hitLimit = false;
+
+  function pushRow(element, rawText) {
+    const text = normalizeText(rawText);
+    if (!isMeaningfulText(text)) {
+      return;
+    }
+
+    if (rows.length >= maxItems) {
+      hitLimit = true;
+      return;
+    }
+
+    const id = element.getAttribute(TRANSLATION_ID_ATTR) || `node-${++counter}`;
+    element.setAttribute(TRANSLATION_ID_ATTR, id);
+    element.setAttribute(SOURCE_TEXT_ATTR, text);
+
+    const clipped = text.length > maxCharsPerItem ? `${text.slice(0, maxCharsPerItem)}...` : text;
+    rows.push({
+      id,
+      text: clipped,
+      element,
+    });
+  }
+
+  const primaryNodes = document.querySelectorAll(PRIMARY_BLOCK_SELECTOR);
+  for (const element of primaryNodes) {
     if (!element || !element.isConnected) {
       continue;
     }
@@ -144,7 +213,7 @@ function collectTranslatableRows(maxCharsPerItem, maxItems) {
       continue;
     }
 
-    if (element.closest("script,style,noscript,pre,code,textarea,[contenteditable='true']")) {
+    if (isExcluded(element)) {
       continue;
     }
 
@@ -153,28 +222,54 @@ function collectTranslatableRows(maxCharsPerItem, maxItems) {
     }
 
     const sourceText = extractSourceText(element);
-    if (sourceText.length < 2) {
-      continue;
-    }
-
-    const id = element.getAttribute(TRANSLATION_ID_ATTR) || `node-${++counter}`;
-    element.setAttribute(TRANSLATION_ID_ATTR, id);
-
-    const clipped =
-      sourceText.length > maxCharsPerItem ? `${sourceText.slice(0, maxCharsPerItem)}...` : sourceText;
-
-    rows.push({
-      id,
-      text: clipped,
-      element,
-    });
-
-    if (rows.length >= maxItems) {
+    pushRow(element, sourceText);
+    if (hitLimit) {
       break;
     }
   }
 
-  return rows;
+  if (!hitLimit) {
+    const fallbackNodes = document.querySelectorAll(FALLBACK_LEAF_SELECTOR);
+    for (const element of fallbackNodes) {
+      if (!element || !element.isConnected) {
+        continue;
+      }
+
+      if (!isVisible(element) || isExcluded(element)) {
+        continue;
+      }
+
+      if (element.matches(PRIMARY_BLOCK_SELECTOR)) {
+        continue;
+      }
+
+      // Skip nested candidates if an ancestor is already tracked.
+      const taggedAncestor = element.closest(`[${TRANSLATION_ID_ATTR}]`);
+      if (taggedAncestor && taggedAncestor !== element) {
+        continue;
+      }
+
+      const directText = getDirectText(element);
+      if (isMeaningfulText(directText)) {
+        pushRow(element, directText);
+      } else {
+        if (element.children.length > 3) {
+          continue;
+        }
+        if (hasMeaningfulBlockChild(element)) {
+          continue;
+        }
+        const nestedText = extractSourceText(element);
+        pushRow(element, nestedText);
+      }
+
+      if (hitLimit) {
+        break;
+      }
+    }
+  }
+
+  return { rows, hitLimit };
 }
 
 function chunkRows(rows, chunkSize) {
@@ -294,7 +389,7 @@ async function translatePage() {
         ? Math.min(Math.max(Math.floor(settings.maxPageItems), 20), 500)
         : DEFAULT_MAX_PAGE_ITEMS;
 
-    const rows = collectTranslatableRows(settings.maxCharsPerItem || 1200, maxPageItems);
+    const { rows, hitLimit } = collectTranslatableRows(settings.maxCharsPerItem || 1200, maxPageItems);
 
     if (rows.length === 0) {
       return { ok: true, count: 0, total: 0, message: "No translatable content found" };
@@ -340,6 +435,8 @@ async function translatePage() {
       meta: {
         chunks: chunks.length,
         generated,
+        hitLimit,
+        maxPageItems,
       },
     };
   } finally {

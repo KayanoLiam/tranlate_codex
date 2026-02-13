@@ -48,7 +48,7 @@ function readFormSettings() {
     tone: ["natural", "faithful", "concise"].includes(toneInput.value) ? toneInput.value : "natural",
     batchSize: toInt(batchSizeInput.value, 6, 1, 20),
     maxCharsPerItem: toInt(maxCharsPerItemInput.value, 1200, 100, 5000),
-    maxPageItems: toInt(maxPageItemsInput.value, 120, 20, 500),
+    maxPageItems: toInt(maxPageItemsInput.value, 220, 20, 500),
   };
 }
 
@@ -61,7 +61,7 @@ function fillForm(settings) {
   toneInput.value = settings.tone || "natural";
   batchSizeInput.value = String(settings.batchSize || 6);
   maxCharsPerItemInput.value = String(settings.maxCharsPerItem || 1200);
-  maxPageItemsInput.value = String(settings.maxPageItems || 120);
+  maxPageItemsInput.value = String(settings.maxPageItems || 220);
 }
 
 async function loadSettings() {

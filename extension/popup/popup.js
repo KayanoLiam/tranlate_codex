@@ -143,7 +143,11 @@ async function handleTranslatePage() {
   try {
     const response = await callActiveTab({ type: "translate-page" });
     const suffix = response.meta?.chunks ? ` in ${response.meta.chunks} chunks` : "";
-    setResult(`Translated ${response.count}/${response.total} blocks${suffix}`);
+    const capped =
+      response.meta?.hitLimit && response.meta?.maxPageItems
+        ? ` (hit page limit ${response.meta.maxPageItems})`
+        : "";
+    setResult(`Translated ${response.count}/${response.total} blocks${suffix}${capped}`);
   } catch (error) {
     if (error.message.includes("Translation already in progress")) {
       setResult("Previous translation is still running. Please wait for it to finish.", true);
