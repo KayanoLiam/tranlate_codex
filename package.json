@@ -1,0 +1,15 @@
+{
+  "name": "openai-auth-immersive-translator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome immersive translator powered by local Codex OpenAI Auth bridge",
+  "type": "module",
+  "scripts": {
+    "bridge:start": "node bridge/server.mjs",
+    "bridge:dev": "node --watch bridge/server.mjs",
+    "check": "node --check bridge/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

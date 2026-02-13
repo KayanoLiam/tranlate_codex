@@ -1,0 +1,92 @@
+:root {
+  font-family: "Segoe UI", "SF Pro Text", Arial, sans-serif;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: #f4f7f8;
+  color: #1d2f3b;
+}
+
+main {
+  max-width: 760px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #d4dce2;
+  border-radius: 12px;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+form {
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  border: 1px solid #a9b6c1;
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: #fff;
+}
+
+.grid.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: #2f668d;
+  color: #fff;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #6a7a89;
+}
+
+.status {
+  margin-top: 14px;
+  min-height: 18px;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  main {
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .grid.two {
+    grid-template-columns: 1fr;
+  }
+}

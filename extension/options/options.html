@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translator Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>OpenAI Immersive Translator Settings</h1>
+
+      <form id="settingsForm">
+        <label>
+          Bridge URL
+          <input id="bridgeUrl" type="text" placeholder="http://127.0.0.1:8787" />
+        </label>
+
+        <div class="grid two">
+          <label>
+            Source Language
+            <input id="sourceLang" type="text" placeholder="auto" />
+          </label>
+
+          <label>
+            Target Language
+            <input id="targetLang" type="text" placeholder="zh-CN" />
+          </label>
+        </div>
+
+        <label>
+          Model (optional)
+          <input id="model" type="text" placeholder="Use codex default model" />
+        </label>
+
+        <div class="grid two">
+          <label>
+            Translation Mode
+            <select id="mode">
+              <option value="bilingual">bilingual</option>
+              <option value="translation-only">translation-only</option>
+            </select>
+          </label>
+
+          <label>
+            Tone
+            <select id="tone">
+              <option value="natural">natural</option>
+              <option value="faithful">faithful</option>
+              <option value="concise">concise</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid two">
+          <label>
+            Batch Size
+            <input id="batchSize" type="number" min="1" max="20" />
+          </label>
+
+          <label>
+            Max Chars Per Item
+            <input id="maxCharsPerItem" type="number" min="100" max="5000" />
+          </label>
+        </div>
+
+        <label>
+          Max Blocks Per Page
+          <input id="maxPageItems" type="number" min="20" max="500" />
+        </label>
+
+        <section class="actions">
+          <button id="saveBtn" type="submit">Save Settings</button>
+          <button id="testBtn" type="button" class="secondary">Test Bridge</button>
+        </section>
+      </form>
+
+      <p id="statusText" class="status"></p>
+    </main>
+
+    <script src="options.js"></script>
+  </body>
+</html>

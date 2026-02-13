@@ -1,0 +1,89 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", "SF Pro Text", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  width: 320px;
+  background: #f5f7fa;
+  color: #1f2f3d;
+}
+
+.app {
+  padding: 14px;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge.pending {
+  background: #5f6f82;
+}
+
+.badge.ok {
+  background: #23804e;
+}
+
+.badge.error {
+  background: #b24b30;
+}
+
+.actions,
+.footer-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.footer-actions {
+  margin-top: 8px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  background: #2d5f8a;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.94;
+}
+
+button.secondary {
+  background: #687a8d;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  min-height: 34px;
+}
