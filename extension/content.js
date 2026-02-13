@@ -120,8 +120,41 @@ function isMeaningfulText(text) {
     return false;
   }
 
+  if (isLikelyDataOrCodeBlob(text)) {
+    return false;
+  }
+
   // Require at least one letter/number-like symbol to avoid punctuation-only rows.
   return /[\p{L}\p{N}]/u.test(text);
+}
+
+function isLikelyDataOrCodeBlob(text) {
+  const compact = normalizeText(text);
+  if (!compact) {
+    return false;
+  }
+
+  const braceCount = (compact.match(/[{}\[\]]/g) || []).length;
+  if (braceCount >= 6 && /":/.test(compact)) {
+    return true;
+  }
+
+  if (
+    compact.length > 120 &&
+    /(function\s*\(|=>|\bconst\b|\blet\b|\bvar\b|\bclass\b|@media|\.css|#include)/.test(compact)
+  ) {
+    return true;
+  }
+
+  if (compact.length > 120) {
+    const punctuationCount = (compact.match(/[{}\[\]"'=,:;]/g) || []).length;
+    const ratio = punctuationCount / compact.length;
+    if (ratio > 0.22 && /:/.test(compact)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function hasDirectTranslatableChild(element) {
@@ -141,7 +174,7 @@ function hasMeaningfulBlockChild(element) {
     if (!(child.matches && child.matches(BLOCK_LIKE_CHILD_SELECTOR))) {
       continue;
     }
-    const text = normalizeText(child.innerText || child.textContent || "");
+    const text = normalizeText(child.innerText || "");
     if (isMeaningfulText(text)) {
       return true;
     }
@@ -166,7 +199,7 @@ function extractSourceText(element) {
 
   const clone = element.cloneNode(true);
   clone.querySelectorAll(`.${NOTE_CLASS}`).forEach((node) => node.remove());
-  const text = normalizeText(clone.innerText || clone.textContent || "");
+  const text = normalizeText(clone.innerText || "");
 
   if (text) {
     element.setAttribute(SOURCE_TEXT_ATTR, text);
